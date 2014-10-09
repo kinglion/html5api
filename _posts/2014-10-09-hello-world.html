@@ -2,6 +2,175 @@
 layout: default
 title: 门铃
 ---
-<h2>{{ page.title }}</h2>
-<p>我的第一篇文章</p>
-<p>{{ page.date | date_to_string }}</p>
+<!DOCTYPE HTML>
+<html style="min-height:465px;">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no,address=no"/>
+    <title>Mark Demo</title>
+
+    <link href="style/style-min.css" rel="stylesheet"/>
+    <link href="style/demo-min.css" rel="stylesheet"/>
+
+    <style>
+        .shock_bg, .shock_box, .shock_door{-moz-box-sizing: border-box;box-sizing:border-box;}
+        .shock_bg{background:#5d5e5d;margin: auto;position:relative;height:100%;overflow:hidden;}
+            /*.shock_door{background:url(door.png) no-repeat;margin:0 auto;position:relative;}*/
+        .shock_door img{max-width:238px;max-height:326px;height:100%;}
+        .shock_box{-webkit-transform-origin-x:0%;-webkit-transform-origin-y:50%;-webkit-transform:perspective(333px);
+            display:block;z-index:100;position:absolute;top:0;right:0;bottom:0;left:0;}
+        .shock_door{-webkit-transform-origin-x:0%;-webkit-transform-origin-y:50%;-webkit-backface-visibility:visible;}
+        .shock_door_open{-webkit-transform:perspective(333px) rotateY(15deg);-webkit-animation:opendoor 1s;}
+        @-webkit-keyframes opendoor{
+            0% {-webkit-transform:rotateY(0deg)}
+            }
+        .shock_bell{background:url(images/bell.png) no-repeat;background-size:68px;display:block;margin:0 auto;width:68px;height:68px;
+            position:absolute;top:20%;right:0;left:0;z-index:100;}
+        .shock_bell:active{background:url(images/bell.png) 0 -76px no-repeat;}
+
+        .shock_txt{background:#000;color:#fff;border-radius:4px;box-shadow:0px -1px 5px #000;margin:-27px auto 0 -114px;
+            padding:10px 7px;font-size:14px;display:none;max-width:228px;min-height:54px;line-height:1.8;position:absolute;top:20%;left:50%;}
+        .shock_txt_show{opacity:1;display:block;-webkit-animation:shock_txt 1s;}
+        .shock_corners{display:none;width:0;height:0;border-top:14px solid transparent;border-left:14px solid #000;
+            border-bottom:14px solid transparent;margin:-14px auto 0 auto;position:absolute;top:50%;right:-14px;}
+        .shock_corners_show{opacity:1;display:block;-webkit-animation:shock_txt 1s;}
+
+        @-webkit-keyframes shock_txt{
+            0% {opacity:0;}
+            }
+    </style>
+</head>
+
+<body class="left-in">
+<header class="header">
+    <a href="../index.html#~loop:svt=demoList" class="bg_x btn_back" title="返回">返回</a>
+
+    <h1 class="title" title="Demo示范">Demo示范</h1>
+</header>
+
+<div class="main main_3">
+    <div class="main_3_box">
+        <h2 class="title">1.门铃</h2>
+        <div id="scroller" class="shock_bg">
+            <div class="shock_box">
+                <p class="shock_txt">
+                    HTML 5 支持设备的视觉、听觉和触觉通知
+                    <span class="shock_corners"></span>
+                </p>
+            </div>
+            <div class="shock_door">
+                <img src="images/door.png" />
+                <a class="shock_bell" href="javascript:void(0);"></a>
+            </div>
+        </div>
+        <div id="album_pop">
+            <div class="pop_bg"></div>
+            <div class="pop bg">
+                <p>不支持振动功能或者HTML5系统消息通知功能<br />demo无法正常使用</p>
+                <a id="album_pop_btn" class="pop_btn" href="javascript:void(0);">返 回</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="zoom_box">
+    <a id="prev-btn" href="webgl.html" class="zoom_prev" title="上一个"><span class="bg_x zoom_icon1"></span><span
+            class="zoom_txt">上一个</span></a>
+    <a id="next-btn" href="geo.html" class="zoom_next" title="下一个"><span class="zoom_txt">下一个 </span><span
+            class="bg_x zoom_icon2"></span></a>
+</div>
+
+<div id="loading">
+    <div class="loading">
+        <div class="loading_img"></div>
+    </div>
+</div>
+
+<script>
+    function shockAnimaEnd($e) {
+        $e.currentTarget.removeEventListener('webkitAnimationEnd', shockAnimaEnd);
+        document.querySelector('.shock_txt').className = 'shock_txt shock_txt_show';
+        document.querySelector('.shock_corners').className = 'shock_corners shock_corners_show';
+    }
+    function bellBtnClick($e) {
+        $e.currentTarget.removeEventListener('click', bellBtnClick);
+        document.querySelector('.shock_door').className = 'shock_door shock_door_open';
+        if (navigator.vibrate) {
+            navigator.vibrate(2000);
+        } else if (navigator.webkitVibrate) {
+            navigator.webkitVibrate(2000);
+        }
+
+        // 发布系统消息
+        var simple_notification = createSimpleNotification('images/128_128.png', 'HTML5系统通知消息', '您好！你的手机支持HTML5系统通知消息哦', '');
+        simple_notification.show();
+
+        //alert(shockBellBtn + '=' + shockBellBtn.isDoorOpen + '=' + navigator);
+    }
+
+    function createSimpleNotification(icon, title, body, replace_id) {
+        var notification;
+        try {
+            notification = window.webkitNotifications.createNotification(icon, title, body);
+            notification.replaceId = replace_id;
+        }
+        catch (err) {
+            alert("抱歉！创建HTML5系统通知消息失败：" + err);
+        }
+
+        notification.error = function () {
+            alert("温馨提示：您的手机还不支持HTML5系统通知消息！");
+        };
+
+//        notification.ondisplay = function() {
+//            alert("notification displayed");
+//        };
+
+        notification.onclose = function (n) {
+            return function () {
+//                alert("notification closed");
+                var i = 0;
+                for (i = 0; i < simple_notifications_queue.length; ++i) {
+                    if (simple_notifications_queue[i] == n) {
+                        front_slice = simple_notifications_queue.slice(0, i);
+                        tail_slice = simple_notifications_queue.slice(i + 1);
+                        simple_notifications_queue = front_slice.concat(tail_slice);
+                    }
+                }
+            };
+        }(notification);
+
+        notification.onclick = function () {
+            alert("您好！这是HTML5系统通知消息");
+        };
+
+        return notification;
+    }
+
+    document.querySelector('.shock_door') && document.querySelector('.shock_door').addEventListener('webkitAnimationEnd', shockAnimaEnd, false);
+    document.querySelector('.shock_bell') && document.querySelector('.shock_bell').addEventListener('click', bellBtnClick, false);
+
+    window.addEventListener('load', function () {
+        document.getElementById("loading").className = 'none';
+    }, false);
+
+    if ((navigator.vibrate || navigator.webkitVibrate) && window.webkitNotifications) {
+        // 用户授权是否允许发布系统消息：
+        if (window.webkitNotifications.checkPermission() != 0) {
+            window.webkitNotifications.requestPermission(function () {});
+        }
+    } else {
+        document.documentElement.style.cssText = "";
+        document.getElementById("loading").className = 'none';
+        document.getElementById('scroller').innerHTML = '';
+        document.getElementById('album_pop').style.display = 'block';
+        document.getElementById('album_pop_btn').onclick = function () {
+            document.getElementById('album_pop').style.display = 'none';
+        }
+    }
+</script>
+</body>
+</html>
