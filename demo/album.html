@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+<html style="min-height:458px;">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no,address=no"/>
+    <title>Mark Demo</title>
+    <link href="../style/style-min.css" rel="stylesheet"/>
+    <link href="../style/demo-min.css" rel="stylesheet"/>
+
+    <style>
+        .album{bottom:0;left:0;position:absolute;right:0;top:0;overflow:hidden;}
+        .album_img{text-align:center;}
+        
+        .album_img img{border:8px solid #fff;width:70%;margin-top:20px;}
+        .album_btn{text-align:center;margin:10px 0;}
+        /*
+        .album_no_img{background:url(images/no_img.jpg) no-repeat;display:inline-block;width:220px;height:220px;margin:0 2px 2px 0;}
+        .album_no_img img{width:220px;height:220px;}
+        .album_img_show{max-width:460px;margin:0 auto;position:absolute;top:0;right:0;bottom:0;left:0;}
+        .album_img_show img{max-width:460px;max-height:460px;height:100%;margin:0 auto;position:absolute;top:0;right:0;bottom:0;left:0;-webkit-animation:album_img_show 1s;}
+        @-webkit-keyframes album_img_show{
+            0% {height:0%;top:50%;}
+        }
+        */
+
+        /* 保存到本地按钮 */
+        .btn_demo_05{color:#595959;display:inline-block;width:34%;max-width:130px;padding:10px 5px;}
+        .btn_demo{margin:10px;}
+        .album_txt_box{background:#fff;padding:1px;}
+        .album_txt{font-size:14px;line-height:1.6;text-align:left;}
+        .album_txt p{line-height:1.6;}
+        
+        /* 命令行样式 */
+        .container {
+          background:#3d3d3d;
+          color:#fff;
+          padding:10px;
+          /*overflow: hidden;
+          white-space: nowrap;*/
+        }
+        
+        .container .success{color:#48e06c;}
+        .container .error{color:#f76c6c;}
+    </style>
+</head>
+
+<body class="left-in">
+<header class="header">
+    <a href="../index.html#~loop:svt=demoList" class="bg_x btn_back" title="返回">返回</a>
+
+    <h1 class="title" title="Demo示范">Demo示范</h1>
+</header>
+<div class="main main_3">
+    <div class="main_3_box">
+        <h2 class="title">5.网页相册</h2>
+        <div id="scroller" class="album">
+            <div id="fileSys" class="album_img">
+                <!-- <img src="images/img_01.jpg"/> 这个图片用js来加载，以监听onload事件，获取正确的#fileSys.clientHeight -->
+            </div>
+            <div id="btns" class="album_btn">
+                <a id="fileSysSaveBtn" class="btn_demo btn_demo_05" href="javascript:void(0);">保存到本地</a>
+                <a id="fileSysDelBtn" class="btn_demo btn_demo_05" href="javascript:void(0);">删 除</a>
+            </div>
+            <div class="container album_txt_box">
+                <div id="fileSysCmd" class="album_txt"></div>
+            </div>
+        </div>
+        <div id="album_pop">
+            <div class="pop_bg"></div>
+            <div class="pop bg">
+                <p id="pop_txt"></p>
+                <a id="album_pop_btn" class="pop_btn" href="javascript:void(0);">返 回</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="zoom_box">
+    <a id="prev-btn" href="camera.html" class="zoom_prev" title="上一个"><span class="bg_x zoom_icon1"></span><span
+            class="zoom_txt">上一个</span></a>
+    <a id="next-btn" href="compass.html" class="zoom_next" title="下一个"><span class="zoom_txt">下一个 </span><span
+            class="bg_x zoom_icon2"></span></a>
+</div>
+
+<div id="loading">
+    <div class="loading">
+        <div class="loading_img"></div>
+    </div>
+</div>
+
+<script>
+    $ = function ($id) {
+        return document.getElementById($id);
+    };
+    var isSupported = false;
+
+    FileSys = function () {
+        this._init();
+    };
+
+    var p = FileSys.prototype;
+
+    p._createEl = function ($className, $html) {
+        var doc = document, div = doc.querySelector('#fileSysCmd'), p = doc.createElement('p'), cnt = 1;
+        div.initH = div.initH || div.clientHeight;
+
+        p.className = $className;
+        p.innerHTML = $html;
+        div.appendChild(p);
+        cnt = Math.max((div.initH / p.clientHeight >> 0), cnt);
+        div.getElementsByTagName('p').length > cnt && div.removeChild(div.getElementsByTagName('p')[0]);
+    };
+
+    p._init = function () {
+        var fileSysRoot, i, doc = document, aa, aaLen, btn, onInitFs, errorHandler, errorHandler2,imgDataStr, img, canvas, ctx, html;
+        errorHandler = function ($e) {
+            html = 'Error：文件系统出错';
+            p._createEl('error', html);
+        };
+
+        errorHandler2 = function ($e) {
+            html = 'Error：图片不存在！';
+            p._createEl('error', html);
+        };
+
+        onInitFs = function (fs) {
+            fileSysRoot = fs.root;
+            fs.root.getFile('fileSystem.jpg', {create:true}, function (fileEntry) {
+                fileEntry.createWriter(function (fileWriter) {
+                    fileWriter.onwriteend = function (e) {
+                        html = 'Success：图片保存成功！';
+                        p._createEl('success', html);
+                        html = '文件列表：' + fileEntry.name;
+                        p._createEl('success', html);
+                    };
+
+                    fileWriter.onerror = errorHandler;
+                    var bb = new window.WebKitBlobBuilder(); // Note: window.WebKitBlobBuilder in Chrome 12.
+                    bb.append(imgDataStr);
+                    fileWriter.write(bb.getBlob('text/plain'));
+                }, errorHandler);
+            }, errorHandler);
+        };
+
+        // add fileSystem img file:
+        this._parent = doc.getElementById('fileSys');
+        btn = doc.getElementById('fileSysSaveBtn');
+        btn.onclick = function () {
+            window.requestFileSystem(window.TEMPORARY, 1024 * 1024 /*5MB*/, onInitFs, errorHandler);
+        };
+
+        // remove fileSystem img file:
+        btn = doc.getElementById('fileSysDelBtn');
+        btn.onclick = function () {
+            if (!fileSysRoot) {
+                html = 'Error: ' + '无法查找系统文件！';
+                p._createEl('error', html);
+                return;
+            }
+
+            fileSysRoot.getFile('fileSystem.jpg', {create:false}, function (fileEntry) {
+                fileEntry.remove(function (e) {
+                    //alert('remove()::' + e);
+                    html = 'Success：图片删除成功！';
+                    p._createEl('success', html);
+                    html = '文件列表：空';
+                    p._createEl('success', html);
+                }, errorHandler2);
+            }, errorHandler2);
+        };
+
+        img = this._parent.getElementsByTagName('img')[0];
+        canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        imgDataStr = canvas.toDataURL('image/jpeg');
+    };
+
+    function showPop($tipStr) {
+        isSupported = false;
+        setHTMLCss();
+        $tipStr = $tipStr || '不支持相册功能<br/>demo无法正常使用';
+        document.getElementById('pop_txt').innerHTML = $tipStr;
+        document.getElementById('album_pop').style.display = 'block';
+        document.getElementById('scroller').innerHTML = '';
+        document.getElementById('album_pop_btn').onclick = function () {
+            this.onclick = null;
+            document.getElementById('album_pop').style.display = 'none';
+        }
+    }
+
+    function setHTMLCss() {
+        var str = "min-height:458px;";
+        document.documentElement.clientHeight < 458 && (str = "min-height:458px; position: relative;");
+        isSupported === false && (str = "");
+        document.documentElement.style.cssText = str;
+    }
+
+    window.addEventListener('load', function () {
+        var doc = document;
+        window.requestFileSystem = window.requestFileSystem || window.webkitRequestFileSystem;
+        if (!!window.requestFileSystem === false) {
+            isSupported = false;
+            doc.getElementById("loading").className = 'none';
+            doc.getElementById('scroller').innerHTML = '';
+            showPop();
+            return;
+        }
+        isSupported = true;
+
+        // load img:
+        var img = new Image();
+        img.onload = function () {
+            document.getElementById("loading").className = 'none';
+            ratio = $('scroller').clientHeight - $('fileSys').clientHeight - $('btns').clientHeight - 20 - 20;
+            $('fileSysCmd').style.height = ratio + 'px';
+            new FileSys();
+        };
+        img.onerror = function () {
+            document.getElementById("loading").className = 'none';
+            showPop('图片加载失败<br />请刷新试试！');
+        };
+        img.src = 'images/img_01.jpg';
+        $('fileSys').appendChild(img);
+
+        setHTMLCss();
+    }, false);
+
+    window.addEventListener('resize', function () {
+        var ratio = $('scroller').clientHeight - $('fileSys').clientHeight - $('btns').clientHeight - 20 - 20;
+        $('fileSysCmd').style.height = ratio + 'px';
+
+        setHTMLCss();
+    }, false);
+</script>
+</body>
+</html>

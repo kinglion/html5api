@@ -1,0 +1,224 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no,address=no"/>
+    <title>Mark Demo</title>
+    <link href="../style/style-min.css" rel="stylesheet"/>
+    <link href="../style/demo-min.css" rel="stylesheet"/>
+    <style>
+        .socket{font-size:20px;text-align:left;}
+		/*
+        .socket .c{color:#434445;}
+        .socket .c_n{font-style:normal;}
+        .socket .c1{color:#34ace8;}
+        */
+		.socket .red{color:#CC4A49;}
+        .socket .green{color:#A2B24E;}
+		.socket .gray{color:#B1B1B1;}
+		
+        .socket_list{bottom:106px;left:0;padding:10px;position:absolute;right:6px;top:2px;}
+        @-moz-document url-prefix(){.socket_list{bottom:114px;right:4px;}}
+        .socket_con{background:#fff;border:1px solid #6d6c6c;border-radius:5px 5px 0 0;box-shadow:0 0 1px #000;font-size:20px;height:100%;resize:none;width:100%;}
+        /*
+         .socket_con{background:#fff;border:1px solid #6d6c6c;border-radius:5px 5px 0 0;box-shadow:0 0 1px #000;bottom:103px;font-size:20px;left:8px;resize:none;padding:10px;position:absolute;top:10px;right:8px;}
+         */
+        .socket_info{background:#fff;border:1px solid #6d6c6c;border-radius:0 0 5px 5px;box-shadow:0 1px 1px #000;bottom:70px;left:10px;padding:8px;position:absolute;right:10px;}
+        .socket_people,
+        .socket_switch{display:inline-block;font-style:normal;overflow:hidden;position:relative;text-overflow:ellipsis;top:-1px;
+                       width:50%;white-space:nowrap;}
+        .socket_people{font-size:20px;}
+        .socket_switch{font-size:18px;text-align:right;}
+        
+        .socket_btn{bottom:10px;left:10px;padding:0 110px 0 0;position:absolute;right:10px;}
+        .socket_input{border:none;border:1px solid #000;border-radius:2px;display:inline-block;height:36px;padding:5px;width:100%;}
+        .socket_submit{background-image:-webkit-linear-gradient(90deg,#34ace8,#68cdff);
+                       background-image:-moz-linear-gradient(top,#68cdff,#34ace8);
+                       background-image:-webkit-gradient(linear,0 0,0 100%,color-stop(0%,#68cdff),color-stop(100%,#34ace8));
+                       
+                       border:none;border-radius:2px;
+                       box-shadow:0px -1px 1px #69aaca inset;color:#fff;display:inline-block;font-size:20px;height:48px;
+                       position:absolute;right:0;top:0;width:90px;}
+    </style>
+</head>
+
+<body class="left-in">
+<header class="header">
+    <a href="../index.html#~loop:svt=demoList" class="bg_x btn_back" title="返回">返回</a>
+
+    <h1 class="title" title="Demo示范">Demo示范</h1>
+</header>
+<div class="main main_3">
+    <div class="main_3_box">
+        <h2 class="title">9.WebSocket</h2>
+        <div id="scroller" class="socket">
+		    <div class="socket_list">
+            <textarea id="textArea" class="socket_con" disabled></textarea></div>
+            <div class="socket_info">
+                <i id="count" class="socket_people"></i><!--
+                --><i id="status" class="socket_switch gray"></i><!--
+                <i class="socket_switch c3">socket close</i>-->
+            </div>
+            <div class="socket_btn">
+                <input id="inputTxt" class="socket_input" type="text" maxlength="50" />
+                <button id="sendBtn" class="socket_submit" disabled>连接中</button>
+            </div>
+        </div>
+
+        <div id="container" style="width:100%;height:100%;"></div>
+        <div id="album_pop">
+            <div class="pop_bg"></div>
+            <div class="pop bg">
+                <p>不支持Websocket功能<br />demo无法正常使用</p>
+                <a id="album_pop_btn" class="pop_btn" href="javascript:void(0);">返 回</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="zoom_box">
+    <a id="prev-btn" href="canvas.html" class="zoom_prev" title="上一个"><span class="bg_x zoom_icon1"></span><span
+            class="zoom_txt">上一个</span></a>
+    <a id="next-btn" href="webgl.html" class="zoom_next" title="下一个"><span class="zoom_txt">下一个 </span><span
+            class="bg_x zoom_icon2"></span></a>
+</div>
+
+<div id="loading">
+    <div class="loading">
+        <div class="loading_img"></div>
+    </div>
+</div>
+
+<script>
+    function $($str, $parentNode) {
+        return ($parentNode || document).querySelector($str);
+    }
+
+    // 这里的连个url的逻辑是：先连接socketUrl1，如果失败，就连接socketUrl2：
+    var socketUrl = 'ws://120.204.200.170:27112/chat',
+        socketUrlBak = 'ws://120.204.200.169:27112/chat',
+        conn = {},
+        connectCnt = 0,
+        isCloseConnent = false;
+
+    function showMsg($msg, $cnt, $isInit) {
+        var txt = $("#textArea");
+
+        if (Number($cnt) === -1) {
+            isCloseConnent = true;
+        } else {
+            !!$isInit === false && (txt.value += $msg + '\n');
+            txt.scrollTop = txt.scrollHeight;
+            $("#count").innerHTML = '在线人数：' + ($cnt || 0);
+        }
+    }
+
+    function change($status) {
+        $("#status").innerHTML = $status;
+        if ($status === 'Socket closed' || $status === 'Socket error') {
+            $("#status").className = 'socket_switch red';
+        } else if ($status === 'Socket opening') {
+            $("#status").className = 'socket_switch gray';
+        } else if ($status === 'Socket open') {
+            $("#status").className = 'socket_switch green';
+        }
+    }
+
+    function testWebsocket() {
+        if (conn.readyState === undefined || conn.readyState > 1) {
+//            conn = new WebSocket('ws://node.remysharp.com:8001');
+//            conn = new WebSocket('ws://html5rocks.websocket.org/echo');
+            connectCnt++;
+            conn = new WebSocket(socketUrl);
+
+            showMsg('WebSocket正在连接中...');
+            showMsg('WebSocket重新连接次数：' + connectCnt + "次");
+            change('Socket opening');
+
+            //连接成功的状态事件
+            conn.onopen = function ($e) {
+                connectCnt = 0;
+                showMsg('WebSocket已经连接成功');
+                change('Socket open');
+                $("#sendBtn").innerHTML = '发 送';
+                $("#sendBtn").removeAttribute('disabled');
+            };
+
+            // 收到信息回调函数
+            conn.onmessage = function ($e) {
+                var msg = $e.data;
+                change('Socket open');
+
+                if (typeof msg === 'string') {
+                    showMsg(msg.slice(msg.indexOf(";")+1), msg.split(";")[0], msg.indexOf(";") === -1);
+                } else {
+
+                }
+            };
+
+            // 连接关闭回调函数
+            conn.onclose = function ($e) {
+                showMsg('WebSocket已经关闭连接');
+                change('Socket closed');
+
+                if (connectCnt < 10 &&  isCloseConnent === false) {
+                    socketUrl = socketUrlBak;
+                    conn.close();
+                    conn = {};
+                    testWebsocket();
+                } else {
+                    conn.close();
+                }
+            };
+
+            // 连接错误回调函数
+            conn.onerror = function ($e) {
+                showMsg('WebSocket连接错误');
+                change('Socket error');
+
+                if (connectCnt < 10) {
+                    socketUrl = socketUrlBak;
+                    conn.close();
+                    conn = {};
+                    testWebsocket();
+                }
+            };
+        }
+    }
+
+    // sendBtn on click send msg:
+    $("#sendBtn").addEventListener('click', function ($e) {
+        var msg = $("#inputTxt").value;
+        if (msg.length === 0 || msg === "不能发送空的消息!") {
+            $("#inputTxt").value = "不能发送空的消息!";
+        } else {
+            $("#inputTxt").value = '';
+            conn.send(msg);
+        }
+    }, false);
+
+    $("#inputTxt").addEventListener('focus', function ($e) {
+        this.value = '';
+    }, false);
+
+
+    window.addEventListener('load', function () {
+        document.getElementById("loading").className = 'none';
+
+        if (window.WebSocket) {
+            testWebsocket();
+        }else {
+            document.getElementById("loading").className = 'none';
+            document.getElementById('scroller').innerHTML = '';
+            document.getElementById('album_pop').style.display = 'block';
+            document.getElementById('album_pop_btn').onclick = function () {
+                document.getElementById('album_pop').style.display = 'none';
+            }
+        }
+    }, false);
+</script>
+</body>
+</html>
