@@ -1,0 +1,214 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no,address=no"/>
+    <title>Mark Demo</title>
+    <link href="../style/style-min.css" rel="stylesheet"/>
+    <link href="../style/demo-min.css" rel="stylesheet"/>
+    <style>
+        #myCanvas {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+
+        #divFPS {
+            position: absolute;
+            left: 0px;
+            right: 0;
+            bottom: 0px;
+            display: inline;
+            text-align: center;
+            color: #000;
+        }
+
+        .photograph_txt {
+            font-size:20px;
+        }
+    </style>
+</head>
+
+<body class="left-in">
+<header class="header">
+    <a href="../index.html#~loop:svt=demoList" class="bg_x btn_back" title="返回">返回</a>
+
+    <h1 class="title" title="Demo示范">Demo示范</h1>
+</header>
+<div class="main main_3">
+    <div class="main_3_box">
+        <h2 class="title">8.Canvas</h2>
+        <div id="scroller" style="position:absolute;top:0;right:0;bottom:0;left:0;">
+            <div id="divFPS"><span>FPS:</span><span id="spanFPS">0</span></div>
+            <canvas id="myCanvas"></canvas>
+            <p class="photograph_txt">点击屏幕试试</p>
+        </div>
+        <div id="album_pop">
+            <div class="pop_bg"></div>
+            <div class="pop bg">
+                <p>不支持画布功能<br />demo无法正常使用</p>
+                <a id="album_pop_btn" class="pop_btn" href="javascript:void(0);">返 回</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="zoom_box">
+    <a id="prev-btn" href="gradienter.html" class="zoom_prev" title="上一个"><span class="bg_x zoom_icon1"></span><span
+            class="zoom_txt">上一个</span></a>
+    <a id="next-btn" href="websocket.html" class="zoom_next" title="下一个"><span class="zoom_txt">下一个 </span><span
+            class="bg_x zoom_icon2"></span></a>
+</div>
+
+<div id="loading">
+    <div class="loading">
+        <div class="loading_img"></div>
+    </div>
+</div>
+
+
+<script>
+    var BALLLIST;
+    var IsStart = false;
+
+    var touchable = 'ontouchstart' in window;
+    BALLLIST = [];
+
+    window.requestAnimationFrame =
+            window.webkitRequestAnimationFrame ||
+                    window.mozRequestAnimationFrame ||
+                    window.oRequestAnimationFrame ||
+                    window.msRequestAnimationFrame ||
+                    function requestAnimationFrame(callback) {
+                        setTimeout(function () {
+                            callback.call(window, Date.now());
+                        }, 0);
+                    };
+
+    function BALL(x, y, r, s, bgColor) {
+        this.x = x;
+        this.y = y;
+        this.r = r;
+        this.speed = s;
+        this.xFlag = 1;
+        this.yFlag = 1;
+        this.bgColor = bgColor;
+    }
+
+    BALL.prototype.checkPosition = function () {
+
+        if (this.x + this.r >= CANVAS_HELPER.width) {
+            this.xFlag = -1;
+        }
+        if (this.y + this.r >= CANVAS_HELPER.height) {
+            this.yFlag = -1;
+        }
+        if (this.x - this.r <= 0) {
+            this.xFlag = 1;
+        }
+        if (this.y - this.r <= 0) {
+            this.yFlag = 1;
+        }
+        this.x += this.speed * this.xFlag;
+        this.y += this.speed * this.yFlag;
+
+    };
+
+    var lastTime = 0;
+    var ctx;
+    var arrFPS = [];
+
+    var CANVAS_HELPER = {
+        width:0,
+        height:0,
+        ctx:false,
+
+        init:function (cid) {
+
+            this.width = document.getElementById(cid).width;
+            this.height = document.getElementById(cid).height;
+
+            ctx = document.getElementById(cid).getContext("2d");
+
+            requestAnimationFrame(CANVAS_HELPER.draw);
+
+        },
+        clear:function () {
+            ctx.clearRect(0, 0, this.width, this.height);
+        },
+        draw:function () {
+            var ts = Date.now();
+            CANVAS_HELPER.clear();
+            for (var i = 0; i < BALLLIST.length; i++) {
+                var b = BALLLIST[i];
+                b.checkPosition();
+                ctx.beginPath();
+                ctx.fillStyle = b.bgColor;
+                ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            if (lastTime > 0) {
+                arrFPS.push(ts > lastTime ? ts - lastTime : 0);
+
+                if (arrFPS.length == 100) {
+                    var sum = 0;
+                    for (var n = 0; n < 100; n++) {
+                        sum += arrFPS[n];
+                    }
+                    var avgTime = sum / 100 / 1000;
+                    arrFPS = [];
+                    //alert(avgTime + "--" + lastTime);
+                    document.querySelector('#spanFPS').innerHTML = Math.round(1 / avgTime);
+                }
+            }
+            lastTime = ts;
+
+            requestAnimationFrame(CANVAS_HELPER.draw);
+        }
+    };
+
+    function loadedDOM() {
+        var eName = 'mousedown';
+        if ('ontouchstart' in window) {
+            eName = 'touchstart';
+        }
+        var c = document.getElementById("myCanvas");
+        c.width = document.querySelector('#scroller').clientWidth - 2;
+        c.height = document.querySelector('#scroller').clientHeight - 2;
+        c.addEventListener(eName, CreateBall);
+        document.body.addEventListener('touchmove', function (event) {
+            event.preventDefault();
+        }, false);
+
+    }
+
+    function CreateBall(event) {
+        var ev = touchable ? event.changedTouches[0] : event;
+        var x = ev.pageX;
+        var y = ev.pageY - 118;
+        var r = Math.floor(Math.random() * 20, 10) + 10;
+        var s = Math.floor(Math.random() * 10, 10) + 1;
+        var bgColor = 'rgb(' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ',' + Math.floor(Math.random() * 255) + ')';
+        var b = new BALL(x, y, r, s, bgColor);
+
+        BALLLIST.push(b);
+
+        if (!IsStart) {
+            IsStart = true;
+            CANVAS_HELPER.init("myCanvas");
+        }
+
+    }
+    //loadedDOM();
+    window.addEventListener("load", loadedDOM);
+    window.addEventListener('load', function () {
+        document.getElementById("loading").className = 'none';
+    }, false);
+</script>
+</body>
+</html>

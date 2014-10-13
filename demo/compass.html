@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html style="min-height:458px;">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no,address=no"/>
+    <title>Mark Demo</title>
+    <link href="../style/style-min.css" rel="stylesheet"/>
+    <link href="../style/demo-min.css" rel="stylesheet"/>
+</head>
+
+<body class="left-in">
+<header class="header">
+    <a href="../index.html#~loop:svt=demoList" class="bg_x btn_back" title="返回">返回</a>
+    <h1 class="title" title="Demo示范">Demo示范</h1>
+</header>
+
+<div class="main main_3">
+    <div class="main_3_box">
+        <h2 class="title">6.指南针</h2>
+        <div id="scroller" style="background:#b29b72;position:absolute;top:0;right:0;bottom:0;left:0;overflow:hidden;">
+            <div style="position:absolute;top:50%;right:0;left:0;margin:-153px auto 0 auto;width:306px;height:306px;">
+                <canvas id="compass" width="306" height="306"></canvas>
+            </div>
+        </div>
+        <div id="album_pop">
+            <div class="pop_bg"></div>
+            <div class="pop bg">
+                <p id="pop_txt">不支持指南针功能<br />demo无法正常使用</p>
+                <a id="album_pop_btn" class="pop_btn" href="javascript:void(0);">返 回</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="zoom_box">
+    <a id="prev-btn" href="album.html" class="zoom_prev" title="上一个">
+        <span class="bg_x zoom_icon1"></span>
+        <span class="zoom_txt">上一个</span>
+    </a>
+    <a id="next-btn" href="gradienter.html" class="zoom_next" title="下一个">
+        <span class="zoom_txt">下一个</span>
+        <span class="bg_x zoom_icon2"></span>
+    </a>
+</div>
+
+<div id="loading">
+    <div class="loading">
+        <div class="loading_img"></div>
+    </div>
+</div>
+
+<script>
+    $ = function ($id) {
+        return document.getElementById($id);
+    };
+    $.status = 'init'; // init(初始化) loaded(文档加载完成)  noHeight(高度不足)  noImg(compass.jpg加载失败)  noCanvas(canvas支持不好)
+    var isSupported = false;
+
+    function showPop($tipStr) {
+        var doc = document;
+        $tipStr = $tipStr || '不支持相册功能<br/>demo无法正常使用';
+        setHTMLCss();
+
+        doc.getElementById('pop_txt').innerHTML = $tipStr;
+        doc.getElementById("loading").className = 'none';
+        doc.getElementById('scroller').innerHTML = '';
+        doc.getElementById('album_pop').style.display = 'block';
+        doc.getElementById('album_pop_btn').onclick = function () {
+            doc.getElementById('album_pop').style.display = 'none';
+        };
+    }
+
+    try {
+        var canvas = document.getElementById("compass");
+        var ctx = canvas.getContext("2d");
+        var heading = 0;
+        var current_heading = 0;
+        var max_speed = 10;
+
+        var imageObj_arrow = new Image();
+        imageObj_arrow.onload = function () {
+            document.getElementById("loading").className = 'none';
+            paint();
+        };
+        imageObj_arrow.onerror = function () {
+            $.status = 'noImg';
+            showPop('加载图片失败<br/>demo无法正常使用');
+        };
+        imageObj_arrow.src = "images/compass.jpg";
+
+        var ww = canvas.width;
+        var wh = canvas.height;
+        ctx.fillStyle = "#b29b72";
+        ctx.fillRect(0, 0, ww, wh);
+        ctx.save();
+        ctx.translate(ww / 2, ww / 2);
+        ctx.rotate(Math.PI * current_heading / 180);
+        ctx.drawImage(imageObj_arrow, -ww / 2, -wh / 2, ww, wh);
+        ctx.restore();
+    } catch ($err) {
+        $.status = 'noCanvas';
+        showPop('canvas支持不完善<br/>demo无法正常使用');
+    }
+
+    function update(evt) {
+        heading = evt.alpha;
+    }
+
+    function paint() {
+        ww = canvas.width;
+        wh = canvas.height;
+        ctx.fillStyle = "#b29b72";
+        ctx.fillRect(0, 0, ww, wh);
+        ctx.save();
+        ctx.translate(ww / 2, ww / 2);
+        ctx.rotate(Math.PI * current_heading / 180);
+        ctx.drawImage(imageObj_arrow, -ww / 2, -wh / 2, ww, wh);
+        ctx.restore();
+
+        deg1 = heading - current_heading;
+        deg2 = 360 - Math.abs(deg1);
+        step = 0;
+        if (Math.abs(deg1) < Math.abs(deg2)) {
+            step = Math.min(Math.abs(deg1) / 15, max_speed);
+            step = deg1 > 0 ? step : -step;
+        }
+        else {
+            step = Math.min(deg2 / 15, max_speed);
+            step = deg1 > 0 ? -step : step;
+        }
+        current_heading += step;
+        setTimeout("paint();", 33);
+    }
+
+    if ("ondeviceorientation" in window) {
+        isSupported = true;
+        window.addEventListener("deviceorientation", update, false);
+    } else {
+        isSupported = false;
+        $.status = 'noDeviceorientation';
+        showPop();
+    }
+
+    function setHTMLCss() {
+        var str = "min-height:458px;";
+        document.documentElement.clientHeight < 458 && (str = "min-height:458px; position: relative;");
+        isSupported === false && (str = "");
+        document.documentElement.style.cssText = str;
+    }
+
+    window.addEventListener('load', function () {
+        setHTMLCss();
+    }, false);
+
+    window.addEventListener('resize', function () {
+        setHTMLCss();
+    }, false);
+</script>
+</body>
+</html>

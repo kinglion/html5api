@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no,address=no"/>
+    <title>Mark Demo</title>
+    <link href="../style/style-min.css" rel="stylesheet"/>
+    <link href="../style/demo-min.css" rel="stylesheet"/>
+    <style>
+        .demo_map {
+            background: url(images/no_map.gif) center center no-repeat;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            text-align: center;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+        .btn_demo_02 {
+            margin:20px auto;
+        }
+
+        .map_txt {
+            background: url(images/no_img.gif) center 0 no-repeat;
+            padding-top:80px;
+            font-size:16px;
+            display: none;
+        }
+    </style>
+    <script src="http://api.map.soso.com/v1.0/main.js"></script>
+</head>
+
+<body class="left-in">
+<header class="header">
+    <a href="../index.html#~loop:svt=demoList" class="bg_x btn_back" title="返回">返回</a>
+
+    <h1 class="title" title="Demo示范">Demo示范</h1>
+</header>
+<div class="main main_3">
+    <div class="main_3_box">
+        <h2 class="title">2.地理信息</h2>
+        <div id="scroller" class="demo_map">
+            <a href="javascript:void(0);" onclick="getPosition()" class="btn_demo btn_demo_02">查找我的位置</a>
+            <p class="map_txt" id="status">搜索失败，请稍后重试</p>
+            <div id="loading_inner" style="position:absolute;display:none">
+                <div class="loading">
+                    <div class="loading_img"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="container" style="width:100%;height:100%;"></div>
+        <div id="album_pop">
+            <div class="pop_bg"></div>
+            <div class="pop bg">
+                <p>不支持地理信息功能<br />demo无法正常使用</p>
+                <a id="album_pop_btn" class="pop_btn" href="javascript:void(0);">返 回</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="zoom_box">
+    <a id="prev-btn" href="door.html" class="zoom_prev" title="上一个"><span class="bg_x zoom_icon1"></span><span
+            class="zoom_txt">上一个</span></a>
+    <a id="next-btn" href="battery.html" class="zoom_next" title="下一个"><span class="zoom_txt">下一个 </span><span
+            class="bg_x zoom_icon2"></span></a>
+</div>
+
+<div id="loading">
+    <div class="loading">
+        <div class="loading_img"></div>
+    </div>
+</div>
+
+<script>
+    function success(position) {
+        var el;
+        var map = new soso.maps.Map(document.getElementById('container'));
+        var myLatLng = new soso.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        map.moveTo(myLatLng);
+        //map.zoomTo(17);
+        map.setZoomLevel(17);
+
+        var marker = new soso.maps.Marker({
+            position:new soso.maps.LatLng(position.coords.latitude, position.coords.longitude),
+            map:map
+        });
+
+        setTimeout(function () {
+            el = document.getElementById('container').childNodes[0];
+            el && (el = el.childNodes[1]);
+            el && (el.style.bottom = '6px');
+        }, 200);
+
+        document.getElementById("loading_inner").style.display = 'none';
+    }
+
+    function error($error) {
+        var el = document.querySelector('#status');
+        el.style.display = "block";
+
+        switch($error.code) {
+            case $error.TIMEOUT:
+                el.innerHTML = "抱歉，暂时无法搜索您的位置！";
+                break;
+            default:
+                el.innerHTML = "抱歉，搜索失败，请稍后重试！";
+        }
+        document.getElementById("loading_inner").style.display = 'none';
+    }
+
+    function getPosition() {
+		var nav = navigator.geolocation || navigator.webkitGeolocation;
+        document.getElementById("loading_inner").style.display = 'block';
+        nav.getCurrentPosition(success, error, {maximumAge:600000, timeout:12000});
+    }
+
+    window.addEventListener('load', function () {
+        document.getElementById("loading").className = 'none';
+    }, false);
+
+    if (navigator.geolocation || navigator.webkitGeolocation) {
+    } else {
+        document.getElementById("loading").className = 'none';
+        document.getElementById('scroller').innerHTML = '';
+        document.getElementById('album_pop').style.display = 'block';
+        document.getElementById('album_pop_btn').onclick = function () {
+            document.getElementById('album_pop').style.display = 'none';
+        }
+    }
+</script>
+</body>
+</html>

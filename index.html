@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html manifest="off.manifest">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no,address=no"/>
+    <title>HTML5 Mark</title>
+    <style type="text/css">
+        #homePage,#testPage,#demoListPage{display:none}html,body,div,span,h1,h2,h3,h4,h5,h6,p,a,img,strong,dl,dt,dd,ol,ul,li,fieldset,form,label,legend{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline}*{-webkit-image-rendering:optimizespeed}*:focus{outline:0;border:0}a{text-decoration:none}body{-webkit-tap-highlight-color:rgba(0,0,0,0);-webkit-touch-callout:none;font-size:16px;background:#e3e3e3}h1{font-weight:normal}.header{background:-webkit-linear-gradient(-90deg,#f9f9f9,#cdcdcb);background:-moz-linear-gradient(top,#f9f9f9,#cdcdcb);background:-ms-linear-gradient(top,#f9f9f9,#cdcdcb);background:-o-linear-gradient(top,#f9f9f9,#cdcdcb);background:linear-gradient(top,#f9f9f9,#cdcdcb);background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#f9f9f9),color-stop(100%,#cdcccb));border-top:4px solid #565656;border-bottom:1px solid #eaeaea;color:#5a5a5a;font-size:16px;width:100%;height:40px;line-height:40px;z-index:1;position:absolute;top:0;right:0;left:0}.header .txt{padding-left:10px}.banner{position:relative;top:44px;margin:0 auto;z-index:2;padding:7px;-webkit-box-shadow:inset 0 1px 7px #6d6b69;-moz-box-shadow:inset 0 1px 7px #6d6b69;-ms-box-shadow:inset 0 1px 7px #6d6b69;-o-box-shadow:inset 0 1px 7px #6d6b69;box-shadow:inset 0 1px 7px #6d6b69}.banner img{position:relative;width:100%;display:block;margin:0 auto;z-index:10}.main,.main_1,.main_2{right:0;bottom:0;left:0}.main{margin:0 auto;position:absolute;top:0}.main section,.main_1,.main_2,.list{position:relative}.main_1{top:60px}.main_2{top:44px}.about_txt{border-bottom:1px solid #c1c1c1;color:#5a5a5a;font-size:14px;line-height:1.8;padding:14px 10px}.copyright_txt{border-top:1px solid #efefef;color:#5a5a5a;font-size:12px;height:34px;line-height:34px;padding:0 10px;text-align:center}.item_01{border-top:1px solid #efefef;border-bottom:1px solid #c1c1c1;height:44px;line-height:44px;padding:0 10px}.link_01{color:#738d33;font-size:14px;display:block;position:relative}#loading{position:fixed;top:0;right:0;bottom:0;left:0;z-index:1000;background:#000;opacity:.5}#loading .loading{position:relative;top:174px}#loading .loading_img{z-index:1002;background-image:url("data:image/png;base64,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");background-size:40px;width:40px;height:40px;margin:0 auto;-webkit-animation:animate_cycle .8s linear infinite}@-moz-keyframes animate_cycle{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);-o-transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);-o-transform:rotate(360deg)}}@-webkit-keyframes animate_cycle{0%{-webkit-transform:rotate(0deg);-moz-transform:rotate(0deg);-ms-transform:rotate(0deg);-o-transform:rotate(0deg)}100%{-webkit-transform:rotate(360deg);-moz-transform:rotate(360deg);-ms-transform:rotate(360deg);-o-transform:rotate(360deg)}}.btn_none{text-decoration:none;font:bold 20px/1em 'Droid Sans',sans-serif;text-shadow:rgba(31,42,6,.9) 1px 1px 1px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;-o-user-select:none;user-select:none;text-align:center;padding:.5em .6em .4em .6em;margin:0 auto;display:block;-webkit-border-radius:5px;-moz-border-radius:5px;-ms-border-radius:5px;-o-border-radius:5px;border-radius:5px;border-top:1px solid rgba(255,255,255,0.8);border-bottom:1px solid rgba(0,0,0,0.1);background-image:-webkit-gradient(radial,50% 0,100,50% 0,0,from(rgba(255,255,255,0)),to(rgba(255,255,255,0.7)));background-image:-moz-gradient(radial,50% 0,100,50% 0,0,from(rgba(255,255,255,0)),to(rgba(255,255,255,0.7)));background-image:-ms-gradient(radial,50% 0,100,50% 0,0,from(rgba(255,255,255,0)),to(rgba(255,255,255,0.7)));background-image:-o-gradient(radial,50% 0,100,50% 0,0,from(rgba(255,255,255,0)),to(rgba(255,255,255,0.7)));background-image:gradient(radial,50% 0,100,50% 0,0,from(rgba(255,255,255,0)),to(rgba(255,255,255,0.7)));-webkit-transition:background .2s ease-in-out;-moz-transition:background .2s ease-in-out;-ms-transition:background .2s ease-in-out;-o-transition:background .2s ease-in-out;transition:background .2s ease-in-out;color:#fff;background-color:#84a633;-webkit-box-shadow:inset rgba(45,59,10,0.25) 0 -0.1em .3em,rgba(45,59,10,0.6) 0 .1em 3px,rgba(45,59,10,0.3) 0 .3em 3px,rgba(45,59,10,0.2) 0 .3em 3px;-moz-box-shadow:inset rgba(45,59,10,0.25) 0 -0.1em .3em,rgba(45,59,10,0.6) 0 .1em 3px,rgba(45,59,10,0.3) 0 .3em 3px,rgba(45,59,10,0.2) 0 .3em 3px;-ms-box-shadow:inset rgba(45,59,10,0.25) 0 -0.1em .3em,rgba(45,59,10,0.6) 0 .1em 3px,rgba(45,59,10,0.3) 0 .3em 3px,rgba(45,59,10,0.2) 0 .3em 3px;-o-box-shadow:inset rgba(45,59,10,0.25) 0 -0.1em .3em,rgba(45,59,10,0.6) 0 .1em 3px,rgba(45,59,10,0.3) 0 .3em 3px,rgba(45,59,10,0.2) 0 .3em 3px;box-shadow:inset rgba(45,59,10,0.25) 0 -0.1em .3em,rgba(45,59,10,0.6) 0 .1em 3px,rgba(45,59,10,0.3) 0 .3em 3px,rgba(45,59,10,0.2) 0 .3em 3px}.btn_none:active{background:#587512;-webkit-box-shadow:inset rgba(0,0,0,0.2) 0 -0.1em .3em,rgba(0,0,0,0.4) 0 .1em 1px,rgba(0,0,0,0.2) 0 .2em 6px;-moz-box-shadow:inset rgba(0,0,0,0.2) 0 -0.1em .3em,rgba(0,0,0,0.4) 0 .1em 1px,rgba(0,0,0,0.2) 0 .2em 6px;-ms-box-shadow:inset rgba(0,0,0,0.2) 0 -0.1em .3em,rgba(0,0,0,0.4) 0 .1em 1px,rgba(0,0,0,0.2) 0 .2em 6px;-o-box-shadow:inset rgba(0,0,0,0.2) 0 -0.1em .3em,rgba(0,0,0,0.4) 0 .1em 1px,rgba(0,0,0,0.2) 0 .2em 6px;box-shadow:inset rgba(0,0,0,0.2) 0 -0.1em .3em,rgba(0,0,0,0.4) 0 .1em 1px,rgba(0,0,0,0.2) 0 .2em 6px;-webkit-transform:translateY(.2em);-moz-transform:translateY(.2em);-ms-transform:translateY(.2em);-o-transform:translateY(.2em);transform:translateY(.2em)}.btn_start{width:100px}.none{display:none}
+    </style>
+</head>
+<body>
+    <div id="homePage"></div>
+    <div id="testPage"></div>
+    <div id="demoListPage"></div>
+    <div id="loading">
+        <div class="loading"><div class="loading_img"> </div></div>
+    </div>
+
+    <script>
+        
+$=function($id){return document.getElementById($id);};var Page=Page||{pageList:[{index:0,id:"homePage",page:null,isInit:true,href:"#~loop:svt=home",title:"主页-HTML5评测"},{index:1,id:"testPage",page:null,isInit:true,href:"#~loop:svt=test",title:"测试结果-HTML5评测"},{index:2,id:"demoListPage",page:null,isInit:true,href:"#~loop:svt=demoList",title:"Demo 列表-HTML5评测"}],HomeCom:{header:{create:function($parentNode){var str='<header class="header">\
+                    <h1 class="txt" title="HTML5手机测试网">HTML5手机测试网</h1>\
+                </header>';$parentNode.innerHTML=str;}},body:{create:function($parentNode){var str='<div class="main">\
+     <div class="banner" style="background:url(images/index_banner.png) center bottom no-repeat;background-size:320px;min-height:150px;"></div>\
+                    <article class="main_1">\
+                        <section>\
+                            <a href="javascript:void(0);" onclick="Page.Manager.goPage(1)" title="开始测试" class="btn_none btn_start">开始测试</a>\
+                            <p class="about_txt">网站依据W3C组织颁布的HTML5标准，对手机浏览器支持HTML5标准的程度进行检测。检测基于设备相关API、HTML5标签和绘图特性等6个纬度，对手机浏览器能力进行全面充分的测试和展示。</p>\
+                        </section>\
+                        <section>\
+                        <ul>\
+                            <li class="item_01">\
+                                <a href="javascript:void(0);" onclick="Page.Manager.goPage(2)" title="DEMO范例演示" class="link_01">DEMO范例演示</a>\
+                            </li>\
+                        </ul>\
+                        </section>\
+                        <section>\
+                            <p class="copyright_txt">腾讯公司 版权所有</p>\
+                        </section>\
+                    </article>\
+                </div>';$parentNode.innerHTML+=str;}}},TestCom:{header:{create:function($parentNode){var str='<header id="test_header" class="header">\
+                        <a href="javascript:void(0)" onclick="Page.Manager.goPage(Page.Manager.indStack.pop(), true)" class="bg_x btn_back"><span class="icon"></span>返回</a>\
+                        <h1 class="title">测试结果</h1>\
+                    </header>';$parentNode.innerHTML=str;}},body:{create:function($parentNode){var str='<article class="main main_2">\
+                        <section id="test_banner">\
+                        <div class="bg_score_banner_bg scores_banner_bg">\
+                            <div class="scores_banner">\
+                                <div class="scores_box">\
+                                    <canvas id="testCanvas" width="480" height="200" style="width:100%;position:relative;top:1px;left:50%;"></canvas>\
+                                    <div id="testLoading" class="scores_box_loading none"></div>\
+                                </div>\
+                                <div class="scores_txt"></div>\
+                            </div>\
+                        </div>\
+                        </section>\
+                        <section>\
+                            <ul id="items_ul" class="list score_list"></ul>\
+                        </section>\
+                    </article>';$parentNode.innerHTML+=str;},load:function(){var mark,doc=document,ratio,w,h,nowTest=function(){if(Page.TestPage.assetLoaded){ratio=(window.innerWidth/480);ratio=Math.min(ratio,1);w=ratio*480;h=ratio*200;ratio=(ratio*100>>0)+'%';$('loading').className='none';doc.querySelector('.scores_box_loading').className='scores_box_loading';doc.querySelector('.scores_box_loading').style.backgroundSize=ratio;doc.querySelector('#testCanvas').style.width=w+'px';doc.querySelector('#testCanvas').style.height=h+'px';doc.querySelector('#testCanvas').style.marginLeft=-w/2+'px';mark=new Mark();mark.test();}else{setTimeout(nowTest,100);}};setTimeout(nowTest,100);}}},DemoListCom:{header:{create:function($parentNode){var str='<header class="header demo_top_title">\
+                    <a href="javascript:void(0)" onclick="Page.Manager.goPage(Page.Manager.indStack.pop(), true)" class="bg_x btn_back" title="返回">返回</a>\
+                    <h1 class="title" title="示范列表">示范列表</h1>\
+                </header>';$parentNode.innerHTML=str;}},body:{create:function($parentNode){var str='<div class="main">\
+                    <article class="main_2">\
+                    <section>\
+                        <ul class="demo_list_bg">\
+                            <li class="item_01">\
+                                <a href="demo/door.html" title="门铃" class="link_02">门铃<span class="icon"></span></a>\
+                            </li>\
+                            <li class="item_01">\
+                                <a href="demo/geo.html" title="地理信息" class="link_02">地理信息<span class="icon"></span></a>\
+                            </li>\
+                            <li class="item_01">\
+                                <a href="demo/battery.html" title="电池管家" class="link_02">电池管家<span class="icon"></span></a>\
+                            </li>\
+                            <li class="item_01">\
+                                <a href="demo/camera.html" title="网页拍照" class="link_02">网页拍照<span class="icon"></span></a>\
+                            </li>\
+                            <li class="item_01">\
+                                <a href="demo/album.html" title="网页相册" class="link_02">网页相册<span class="icon"></span></a>\
+                            </li>\
+                            <li class="item_01">\
+                                <a href="demo/compass.html" title="指南针" class="link_02">指南针<span class="icon"></span></a>\
+                            </li>\
+                            <li class="item_01">\
+                                <a href="demo/gradienter.html" title="重力感应球" class="link_02">重力感应球<span class="icon"></span></a>\
+                            </li>\
+       <li class="item_01">\
+                                <a href="demo/canvas.html" title="Canvas" class="link_02">Canvas<span class="icon"></span></a>\
+                            </li>\
+       <li class="item_01">\
+                                <a href="demo/websocket.html" title="WebSocket" class="link_02">WebSocket<span class="icon"></span></a>\
+                            </li>\
+       <li class="item_01">\
+                                <a href="demo/webgl.html" title="WebGL" class="link_02">WebGL<span class="icon"></span></a>\
+                            </li>\
+                        </ul>\
+                    </section>\
+                    </article>\
+                </div>';$parentNode.innerHTML+=str;}}},HomePage:{pageRoot:'homePage',isLoad:true,create:function(){var root=$(this.pageRoot);Page.HomeCom.header.create(root);Page.HomeCom.body.create(root);},load:function(){$("loading").className='none';},show:function(){$(this.pageRoot).style.display="block";},hide:function(){$(this.pageRoot).style.display="none";}},TestPage:{pageRoot:'testPage',isLoad:true,create:function(){var root=$(this.pageRoot);Page.TestCom.header.create(root);Page.TestCom.body.create(root);},load:function(){if(this.isLoad){this.isLoad=false;Page.TestCom.body.load();}},show:function(){$(this.pageRoot).style.display="block";},hide:function(){$(this.pageRoot).style.display="none";}},DemoListPage:{pageRoot:'demoListPage',isLoad:true,create:function(){var root=$(this.pageRoot);Page.DemoListCom.header.create(root);Page.DemoListCom.body.create(root);},load:function(){$("loading").className='none';},show:function(){$(this.pageRoot).style.display="block";},hide:function(){$(this.pageRoot).style.display="none";}},Manager:{indStack:[],curInd:0,curPage:null,interval:0,create:function(){Page.HomePage.create();Page.TestPage.create();Page.DemoListPage.create();},goPage:function($pageId,$isReturn){var pageObj;$isReturn=!!$isReturn;this.curInd=$pageId||0;if(this.curPage===Page.pageList[$pageId]){return;}
+pageObj=this.curPage;pageObj&&!$isReturn&&(this.indStack.push(pageObj.index));pageObj&&pageObj.page.hide();this.curPage=Page.pageList[this.curInd];this.curPage.isInit&&($('loading').className='');this.curPage.isInit=false;this.curPage.page.show();this.curPage.page.load();document.title=this.curPage.title;document.location.hash=this.curPage.href;},onHashChange:function(){var hashObj,hash=document.location.hash;if(hash===''||hash.indexOf('#~loop:')===-1||hash.indexOf('#~loop:')!==0){this.goPage(0);return;}
+try{hashObj=JSON.parse(hash.replace('#~loop:','{"').replace(/&/ig,'","').replace(/\=/ig,'":"')+'"}');}catch(err){this.goPage(0);return;}
+if(hashObj===undefined||!hashObj.hasOwnProperty('svt')){this.goPage(0);return;}
+switch(hashObj.svt){case"home":this.goPage(0);break;case"test":this.goPage(1);break;case"demoList":this.goPage(2);break;}}}};Page.pageList[0].page=Page.HomePage;Page.pageList[1].page=Page.TestPage;Page.pageList[2].page=Page.DemoListPage;var Data=Data||{ajax:function($oParam,$URL,$oSuccFunc,$oFailFunc,$oTimeout){var xmlobj=new XMLHttpRequest();var timeMonitor=undefined;var handleStateChange=function(){if(xmlobj.readyState===4){if(timeMonitor!==undefined){clearTimeout(timeMonitor);}
+if(xmlobj.status===200||xmlobj.status===304){$oSuccFunc(xmlobj.responseText);}
+else{$oFailFunc(xmlobj.status);}
+xmlobj.removeEventListener('readystatechange',handleStateChange);xmlobj=undefined;}};xmlobj.addEventListener('readystatechange',handleStateChange);xmlobj.open("post",$URL,true);xmlobj.setRequestHeader("Content-Type","application/x-www-form-urlencoded");if($oTimeout!==undefined){timeMonitor=setTimeout(function(){xmlobj.abort();timeMonitor=undefined;},$oTimeout);}
+xmlobj.send($oParam);},LocalStorage:{hasLocalStorage:window.localStorage?true:false,setItem:function(key,value){if(this.hasLocalStorage===true){if(typeof value==='object'){value=JSON.stringify(value);}
+localStorage.setItem(key,value);}},getItem:function(key){if(this.hasLocalStorage===true){return localStorage.getItem(key);}
+return null;}}};var Loader=(function(){var p={};p.target=null;p.load=function($url,$type,$success,$fail,$timeout){var that=this,doc=document,el=null,div,interval,timeout;p._success=$success;p._fail=$fail;if($type==='script'){el=doc.createElement('script');doc.body.appendChild(el);el.onload=el.onreadystatechange=p._onSuccess;el.src=$url;}else if($type==='css'){div=doc.createElement('div');doc.body.appendChild(div);div.id='test_css_loaded';el=doc.createElement('link');doc.body.appendChild(el);el.rel='stylesheet';el.href=$url;interval=setInterval(function(){if('none'===p._getStyle(div,'display')){clearInterval(interval);clearTimeout(timeout);div.parentNode.removeChild(div);that._onSuccess();}},100);timeout=setTimeout(function(){clearInterval(interval);clearTimeout(timeout);div.parentNode.removeChild(div);that._onFail();},$timeout);}else if($type==='image'){el=new Image();el.onload=el.onreadystatechange=p._onSuccess;el.src=$url;}
+p.target=el;return el;};p._onSuccess=function(){p._success(p.target);};p._onFail=function(){p._fail&&p._fail();};p._getStyle=function($el,$name){if($el.currentStyle){return $el.currentStyle[$name];}else{return $el.ownerDocument.defaultView.getComputedStyle($el,null)[$name];}};return p;}());
+    </script>
+    <script>
+        function loaded($e) {
+            var count = 0;
+            window.removeEventListener('load', loaded);
+
+            if (navigator.cpuClass) {
+                if (Number(navigator.userAgent.toLowerCase().match(/msie ([\d.]+)/)[1]) < 8.0) {
+                    alert("您的浏览器版本过低，无法访问该网站！");
+                    return;
+                }
+            }
+
+            function assetsLoaded() {
+                count++;
+                count >= 2 && (Page.TestPage.assetLoaded = true);
+            }
+
+            Page.Manager.create();
+
+            setTimeout(function () {
+                Page.Manager.onHashChange();
+
+                // load testPage asset:
+                Loader.load('style/style-min.css', 'css', assetsLoaded, null, 30000);
+                Loader.load('js/test_v1.0.0-min.js', 'script', assetsLoaded);
+            }, 200);
+        }
+
+        function onHashChange($e) {
+            Page.Manager.onHashChange();
+        }
+
+        window.addEventListener('load', loaded, false);
+        window.addEventListener('hashchange', onHashChange, false);
+
+        window.addEventListener('load', function(e) {
+            window.applicationCache.addEventListener('updateready', function(e) {
+                if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+                    window.applicationCache.swapCache();
+                    window.location.reload();
+                }
+            }, false);
+        });
+    </script>
+</body>
+</html>
